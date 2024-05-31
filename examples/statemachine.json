@@ -1,0 +1,50 @@
+{
+  "initialState": "unknown",
+  "inputs": {
+    "clusters": ["main-euc1-se-main01"],
+    "mgmtURL": "https://rancher.wisek8s.io"
+  },
+  "states": {
+    "unknown": {
+      "transitions": {
+        "asg:management-available": { "next": "healthy" },
+        "not": {
+          "inputs": {
+            "for": 300,
+            "matcher": "asg:management-available"
+          },
+          "next": "disabling-rotation"
+        }
+      }
+    },
+    "disabling-rotation": {
+      "action": "asg:disable-rotation",
+      "transitions": {
+        "always": { "next": "unealthy" }
+      }
+    },
+    "unhealthy": {
+      "action": "slack:notify",
+      "transitions": {
+        "times": {
+          "inputs": {
+            "n": 5,
+            "matcher": "rancher:management-available"
+          },
+          "next": "healthy"
+        }
+      }
+    },
+    "healthy": {
+      "transitions": {
+        "not": {
+          "inputs": {
+            "for": 30,
+            "matcher": "rancher:management-available"
+          },
+          "next": "disabling-rotation"
+        }
+      }
+    }
+  }
+}
