@@ -1,8 +1,8 @@
 {
   "initialState": "unknown",
   "inputs": {
-    "clusters": ["main-euc1-se-main01"],
-    "mgmtURL": "https://rancher.wisek8s.io"
+    "clusters": ["main"],
+    "mgmtURL": "https://mgmt01.rancher.io"
   },
   "states": {
     "unknown": {
